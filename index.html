@@ -6,7 +6,7 @@
     <title>SRD Group, LLC</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=EB+Garamond:wght@400;500;600&family=Montserrat:wght@200;300;400&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@300;400;500;600;700&family=EB+Garamond:wght@400;500;600&family=Montserrat:wght@200;300;400&family=Outfit:wght@200;300;400;500;600&display=swap" rel="stylesheet">
     <style>
         *, *::before, *::after {
             margin: 0;
@@ -129,6 +129,42 @@
             animation: fadeUp 1.6s ease-out 0.3s forwards;
         }
 
+        .logo-container {
+            margin-bottom: 2.2rem;
+            opacity: 0;
+            animation: fadeUp 1.6s ease-out 0.3s forwards;
+        }
+
+        .logo-box {
+            width: 220px;
+            height: 220px;
+            border: 1.5px solid var(--gold);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            filter: drop-shadow(0 2px 20px rgba(0,0,0,0.4));
+        }
+
+        .logo-srd {
+            font-family: 'Cormorant Garamond', Georgia, serif;
+            font-size: 66px;
+            font-weight: 600;
+            color: var(--white);
+            letter-spacing: 18px;
+            text-indent: 18px;
+        }
+
+        .logo-group {
+            font-family: 'Outfit', sans-serif;
+            font-size: 19px;
+            font-weight: 400;
+            color: rgba(255,255,255,0.7);
+            letter-spacing: 22px;
+            text-indent: 22px;
+        }
+
         .divider {
             width: 50px;
             height: 1px;
@@ -234,15 +270,19 @@
 
     <div class="page">
         <main class="content">
-            <h1 class="company-name">SRD Group</h1>
-            <div class="divider"></div>
+            <div class="logo-container">
+                <div class="logo-box">
+                    <div class="logo-srd">SRD</div>
+                    <div class="logo-group">GROUP</div>
+                </div>
+            </div>
             <p class="tagline">Strategic Advisors &amp; Long Term Investors</p>
         </main>
 
         <footer class="footer">
             <div class="footer-content">
                 <p class="footer-info">
-                    Southlake, TX<span class="sep">|</span><a href="mailto:info@srdgroup.com">info@srdgroup.com</a>
+                    <a href="mailto:info@srdgroup.com">info@srdgroup.com</a>
                 </p>
                 <p class="footer-copyright">&copy; 2026 SRD Group, LLC. All rights reserved.</p>
             </div>
