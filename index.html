@@ -5,6 +5,12 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>SRD Group, LLC</title>
 
+    <!-- Security Headers (enforced via meta tags for GitHub Pages) -->
+    <meta http-equiv="X-Content-Type-Options" content="nosniff" />
+    <meta http-equiv="X-Frame-Options" content="DENY" />
+    <meta http-equiv="Permissions-Policy" content="camera=(), microphone=(), geolocation=()" />
+    <meta http-equiv="Referrer-Policy" content="strict-origin-when-cross-origin" />
+
     <!-- Open Graph / Link Preview Tags -->
     <meta property="og:type" content="website" />
     <meta property="og:url" content="https://srdgroup.com/" />
@@ -34,7 +40,7 @@
     <link rel="apple-touch-icon" href="apple-touch-icon.png" />
 
     <!-- Preload first slideshow image for faster initial paint -->
-    <link rel="preload" as="image" href="https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=1920&q=80" />
+    <link rel="preload" as="image" href="images/slide-1.jpg" />
 
     <!-- Structured Data (JSON-LD) -->
     <script type="application/ld+json">
@@ -83,6 +89,77 @@
             background: var(--charcoal);
         }
 
+        /* ── Loading State ── */
+        .loader {
+            position: fixed;
+            inset: 0;
+            z-index: 100;
+            background: var(--charcoal);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            gap: 24px;
+            transition: opacity 0.8s ease-out, visibility 0.8s ease-out;
+        }
+
+        .loader.loaded {
+            opacity: 0;
+            visibility: hidden;
+        }
+
+        .loader-logo {
+            width: 120px;
+            height: 120px;
+            border: 1.5px solid var(--gold);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            gap: 4px;
+            opacity: 0;
+            animation: loaderFadeIn 0.8s ease-out 0.1s forwards;
+        }
+
+        .loader-logo .loader-srd {
+            font-family: 'Cormorant Garamond', Georgia, serif;
+            font-size: 36px;
+            font-weight: 600;
+            color: var(--white);
+            letter-spacing: 10px;
+            text-indent: 10px;
+        }
+
+        .loader-logo .loader-group {
+            font-family: 'Outfit', sans-serif;
+            font-size: 10px;
+            font-weight: 400;
+            color: rgba(255,255,255,0.7);
+            letter-spacing: 12px;
+            text-indent: 12px;
+        }
+
+        .loader-bar {
+            width: 120px;
+            height: 1px;
+            background: rgba(255,255,255,0.1);
+            overflow: hidden;
+            opacity: 0;
+            animation: loaderFadeIn 0.8s ease-out 0.4s forwards;
+        }
+
+        .loader-bar-fill {
+            width: 0%;
+            height: 100%;
+            background: var(--gold);
+            transition: width 0.3s ease-out;
+        }
+
+        @keyframes loaderFadeIn {
+            from { opacity: 0; transform: translateY(8px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
         /* ── Slideshow ── */
         .slideshow {
             position: fixed;
@@ -106,22 +183,22 @@
         }
 
         .slide:nth-child(1) {
-            background-image: url('https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=1920&q=80');
+            background-image: url('images/slide-1.jpg');
             animation-delay: 0s;
         }
 
         .slide:nth-child(2) {
-            background-image: url('https://images.unsplash.com/photo-1470071459604-3b5ec3a7fe05?w=1920&q=80');
+            background-image: url('images/slide-2.jpg');
             animation-delay: -6s;
         }
 
         .slide:nth-child(3) {
-            background-image: url('https://images.unsplash.com/photo-1441974231531-c6227db76b6e?w=1920&q=80');
+            background-image: url('images/slide-3.jpg');
             animation-delay: -12s;
         }
 
         .slide:nth-child(4) {
-            background-image: url('https://images.unsplash.com/photo-1562310503-a918c4c61e38?w=1920&q=80');
+            background-image: url('images/slide-4.jpg');
             animation-delay: -18s;
         }
 
@@ -324,6 +401,17 @@
 </head>
 <body>
 
+    <!-- Loading screen (shown while images load) -->
+    <div class="loader" id="loader">
+        <div class="loader-logo">
+            <div class="loader-srd">SRD</div>
+            <div class="loader-group">GROUP</div>
+        </div>
+        <div class="loader-bar">
+            <div class="loader-bar-fill" id="loaderBar"></div>
+        </div>
+    </div>
+
     <!-- Slideshow images (decorative, hidden from screen readers) -->
     <div class="slideshow" role="presentation" aria-hidden="true">
         <div class="slide active"></div>
@@ -354,15 +442,50 @@
         </footer>
     </div>
 
-    <!-- Slideshow rotation script -->
+    <!-- Loading + Slideshow script -->
     <script>
         (function() {
-            const slides = document.querySelectorAll('.slide');
-            let current = 0;
-            const interval = 6000;
+            // ── Image preloader with progress bar ──
+            var images = [
+                'images/slide-1.jpg',
+                'images/slide-2.jpg',
+                'images/slide-3.jpg',
+                'images/slide-4.jpg'
+            ];
+            var loaded = 0;
+            var bar = document.getElementById('loaderBar');
+            var loader = document.getElementById('loader');
+
+            function onImageLoad() {
+                loaded++;
+                bar.style.width = (loaded / images.length * 100) + '%';
+                if (loaded >= images.length) {
+                    // Small delay so the completed bar is visible
+                    setTimeout(function() {
+                        loader.classList.add('loaded');
+                    }, 300);
+                }
+            }
+
+            images.forEach(function(src) {
+                var img = new Image();
+                img.onload = onImageLoad;
+                img.onerror = onImageLoad; // Don't block on failed loads
+                img.src = src;
+            });
+
+            // Fallback: hide loader after 5s regardless
+            setTimeout(function() {
+                loader.classList.add('loaded');
+            }, 5000);
+
+            // ── Slideshow rotation ──
+            var slides = document.querySelectorAll('.slide');
+            var current = 0;
+            var interval = 6000;
 
             // Respect reduced motion preference
-            const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+            var prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
             if (prefersReducedMotion) return;
 
             function nextSlide() {
