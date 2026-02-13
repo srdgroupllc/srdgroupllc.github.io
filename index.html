@@ -4,6 +4,54 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>SRD Group, LLC</title>
+
+    <!-- Open Graph / Link Preview Tags -->
+    <meta property="og:type" content="website" />
+    <meta property="og:url" content="https://srdgroup.com/" />
+    <meta property="og:title" content="SRD Group, LLC" />
+    <meta property="og:description" content="Strategic Advisors & Long Term Investors" />
+    <meta property="og:image" content="https://srdgroup.com/og-image.jpg" />
+    <meta property="og:image:width" content="1200" />
+    <meta property="og:image:height" content="630" />
+
+    <!-- Twitter Card Tags -->
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content="SRD Group, LLC" />
+    <meta name="twitter:description" content="Strategic Advisors & Long Term Investors" />
+    <meta name="twitter:image" content="https://srdgroup.com/og-image.jpg" />
+
+    <!-- Standard meta description -->
+    <meta name="description" content="SRD Group, LLC — Strategic Advisors & Long Term Investors" />
+
+    <!-- Canonical URL -->
+    <link rel="canonical" href="https://srdgroup.com/" />
+
+    <!-- Favicon (inline SVG — works in all modern browsers) -->
+    <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='8' fill='%23111111'/%3E%3Crect x='6' y='6' width='52' height='52' rx='2' fill='none' stroke='%23c4a96a' stroke-width='1.5'/%3E%3Ctext x='32' y='37' text-anchor='middle' font-family='Georgia,serif' font-size='20' font-weight='600' fill='white' letter-spacing='3'%3ESRD%3C/text%3E%3C/svg%3E" />
+    <!-- Fallback favicon for older browsers -->
+    <link rel="icon" type="image/png" href="favicon.png" sizes="64x64" />
+    <!-- Apple Touch Icon (home screen bookmark) -->
+    <link rel="apple-touch-icon" href="apple-touch-icon.png" />
+
+    <!-- Preload first slideshow image for faster initial paint -->
+    <link rel="preload" as="image" href="https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=1920&q=80" />
+
+    <!-- Structured Data (JSON-LD) -->
+    <script type="application/ld+json">
+    {
+        "@context": "https://schema.org",
+        "@type": "Organization",
+        "name": "SRD Group, LLC",
+        "url": "https://srdgroup.com",
+        "description": "Strategic Advisors & Long Term Investors",
+        "email": "info@srdgroup.com",
+        "foundingLocation": {
+            "@type": "Place",
+            "name": "United States"
+        }
+    }
+    </script>
+
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@300;400;500;600;700&family=EB+Garamond:wght@400;500;600&family=Montserrat:wght@200;300;400&family=Outfit:wght@200;300;400;500;600&display=swap" rel="stylesheet">
@@ -80,6 +128,23 @@
         @keyframes kenburns {
             0% { transform: scale(1); }
             100% { transform: scale(1.08); }
+        }
+
+        /* Respect reduced-motion preferences */
+        @media (prefers-reduced-motion: reduce) {
+            .slide {
+                animation: none;
+                transition: opacity 0.5s ease-in-out;
+            }
+            .company-name,
+            .logo-container,
+            .divider,
+            .tagline,
+            .footer-content {
+                animation: none;
+                opacity: 1;
+                transform: none;
+            }
         }
 
         /* Dark overlay on top of slideshow */
@@ -259,21 +324,21 @@
 </head>
 <body>
 
-    <!-- Slideshow images -->
-    <div class="slideshow">
+    <!-- Slideshow images (decorative, hidden from screen readers) -->
+    <div class="slideshow" role="presentation" aria-hidden="true">
         <div class="slide active"></div>
         <div class="slide"></div>
         <div class="slide"></div>
         <div class="slide"></div>
     </div>
-    <div class="overlay"></div>
+    <div class="overlay" role="presentation" aria-hidden="true"></div>
 
     <div class="page">
         <main class="content">
-            <div class="logo-container">
+            <div class="logo-container" role="img" aria-label="SRD Group logo">
                 <div class="logo-box">
-                    <div class="logo-srd">SRD</div>
-                    <div class="logo-group">GROUP</div>
+                    <div class="logo-srd" aria-hidden="true">SRD</div>
+                    <div class="logo-group" aria-hidden="true">GROUP</div>
                 </div>
             </div>
             <p class="tagline">Strategic Advisors &amp; Long Term Investors</p>
@@ -282,7 +347,7 @@
         <footer class="footer">
             <div class="footer-content">
                 <p class="footer-info">
-                    <a href="mailto:info@srdgroup.com">info@srdgroup.com</a>
+                    <a href="mailto:info@srdgroup.com" aria-label="Send email to info@srdgroup.com">info@srdgroup.com</a>
                 </p>
                 <p class="footer-copyright">&copy; 2026 SRD Group, LLC. All rights reserved.</p>
             </div>
@@ -295,6 +360,10 @@
             const slides = document.querySelectorAll('.slide');
             let current = 0;
             const interval = 6000;
+
+            // Respect reduced motion preference
+            const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+            if (prefersReducedMotion) return;
 
             function nextSlide() {
                 slides[current].classList.remove('active');
